@@ -10,12 +10,19 @@
 }
 
 .ficha{
-    height: 7em;
-    width: 7em;
-    background-color: rgb(40, 4, 245);
+    border: solid 0.4em;
+    border-color: rgb(20, 4, 245);
+    border-radius: 100%;
+    height: 80px;
+    width: 80px
 }
 
 .ficha:hover{
-    background-color: rgb(75, 6, 165);
+    border-color: rgb(56, 143, 53);
     transition: 0.3s;
+}
+
+.btn-ficha{
+    background: transparent;
+    border: 0em;
 }
