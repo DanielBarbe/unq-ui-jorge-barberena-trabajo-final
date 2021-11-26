@@ -1,0 +1,21 @@
+:root {
+    --grid-cols: 4;
+}
+
+.tablero{
+    display: grid;
+    grid-template-columns: repeat(var(--grid-cols), 7em);
+    grid-gap: 1em;
+    margin: 5em;
+}
+
+.ficha{
+    height: 7em;
+    width: 7em;
+    background-color: rgb(40, 4, 245);
+}
+
+.ficha:hover{
+    background-color: rgb(75, 6, 165);
+    transition: 0.3s;
+}
