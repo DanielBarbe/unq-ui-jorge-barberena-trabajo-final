@@ -1,21 +1,14 @@
-import { useState } from "react";
+import '../css/main.css';
 import reverso from "../img/reverso.png";
 
-const Ficha = ({frente, index , setFicha, setIndex}) => {
+const Ficha = ({animandose, onSelection, ficha}) => (
+    <div className="ficha" onClick={() => (!ficha.volteada && !animandose) && onSelection(ficha)}>
+        <div className={`ficha-voltear ${ficha.volteada && 'ficha-accion'}`}>
+            <div>
+                <img className="ficha-imagen" src={ficha.volteada ? ficha.imagen : reverso} />
+            </div>
+        </div>
+    </div>
+)
 
-    const [imagen, setImagen] = useState(reverso)
-
-    const voltearFicha = () => {
-        if (imagen === reverso) {
-            setImagen(frente)
-            setFicha(frente)
-            setIndex(index)
-        }
-    } 
-
-    return  <button className="btn-ficha" onClick={ () => { voltearFicha() }}> 
-                <img className="ficha"src={imagen} alt=""/>
-            </button>
-}
-
-export default Ficha
+export default Ficha;

@@ -1,5 +1,5 @@
 import "../css/main.css"
-import Ficha from "./Ficha.jsx"
+import Tablero from "./Tablero.jsx"
 import batman from "../img/batman.png"
 import captain from "../img/captain.png"
 import flash from "../img/flash.png"
@@ -10,58 +10,53 @@ import robin from "../img/robin.png"
 import spiderman from "../img/spiderman.png"
 import superman from "../img/superman.png"
 import wonder from "../img/wonder.png"
-import { useEffect, useState } from "react"
+import NavBar from "./NavBar.jsx"
+import { useState } from "react"
 
+const imagenes = [batman, captain, flash, green, ironman, punisher, robin, spiderman, superman, wonder]
 
 const App = () => {
 
   const root = document.querySelector(':root');
-  const [ficha, setFicha] = useState(null);
-  const [fichaEnEspera, setFichaEnEspera] = useState(null);
-  const [indexFicha, setIndexFicha] = useState(null);
-  const [indexFichaEnEspera, setIndexFichaEnEspera] = useState(null);
-  const [puntaje, setPuntaje] = useState(0);
+  const [animandose, setAnimandose] = useState(false);
+  const [fichaElegida, setFichaElegida] = useState(null);
   const [fichasMezcladas, setFichasMezcladas] = useState([]);
-  let fiches = []
+  const [tamañoTablero, setTamañoTablero] = useState(4);
+  const [partidaEnCurso, setPartidaEnCurso] = useState(false);
+  const [puntajes, setPuntajes] = useState([0,0]);
+  const [cantJugadores, setCantJugadores] = useState(1);
+  const [turno, setTurno] = useState(0);
 
-  const imagenes = [batman, captain, flash, green, ironman, punisher, robin, spiderman, superman, wonder]
-
-  useEffect (() => {
-    if(ficha && !fichaEnEspera){
-      setIndexFichaEnEspera(indexFicha)
-      setFichaEnEspera(ficha)
-      setIndexFicha(null)
-      setFicha(null)
-    }  
-    ficha && fichaEnEspera && verificarSeleccion()
-  }, [ficha]);
-
-  const verificarSeleccion = () => {
-    if(ficha === fichaEnEspera){
-      setPuntaje(puntaje + 1)
-    }else{
-      voltear(fichaEnEspera, indexFichaEnEspera)
-      voltear(ficha, indexFicha)
-    }
-    setFicha(null)
-    setFichaEnEspera(null)
-    setIndexFicha(null)
-    setIndexFichaEnEspera(null)
+  const iniciarJuego = () => {
+    setPartidaEnCurso(true);
+    definirColumnasTablero()
+    const imagenesMezcladas = prepararImagenes(tamañoTablero * tamañoTablero);
+    setFichasMezcladas(imagenesMezcladas.map( (imagen, i) => ({ index: i, imagen, volteada: false }) ));
+    prepararFichas();
   }
 
-  const voltear = (imagen, index) => {
-    let tmp = [...fichasMezcladas]
-    tmp.splice(index,1, <Ficha frente={imagen} index={index} setFicha={setFicha} setIndex={setIndexFicha}/>)
-    setFichasMezcladas(tmp) 
-    console.log(tmp)
+  const reiniciarJuego = () => {
+    setPartidaEnCurso(true);
+    definirColumnasTablero()
+    setPuntajes([0,0]);
+    prepararFichas();
   }
 
-  const prepararFichas = (cantidad) => {
-    let result = []
-    let indexImg = 0
+  const definirColumnasTablero = () => {
+    root.style.setProperty('--grid-cols', tamañoTablero)
+  }
+
+  const prepararFichas = () => {
+    const imagenesMezcladas = prepararImagenes(tamañoTablero * tamañoTablero);
+    setFichasMezcladas(imagenesMezcladas.map( (imagen, i) => ({ index: i, imagen, volteada: false }) ));
+  }
+
+  const prepararImagenes = (cantidad) => {
+    let result = [];
+    let indexImg = 0;
     for (let i = 0; i < cantidad/2; i++){
-      result.push(imagenes[indexImg], imagenes[indexImg])
-      indexImg = (indexImg + 1) % imagenes.length 
+      result.push(imagenes[indexImg], imagenes[indexImg]);
+      indexImg = (indexImg + 1) % imagenes.length ;
     }
     for (let i = result.length - 1; i > 0; i--) {
       let j = Math.floor(Math.random() * (i + 1));
@@ -69,24 +64,47 @@ const App = () => {
       result[i] = result[j];
       result[j] = temp;
     }
-    setFichasMezcladas(result.map( (imagen, i) => ( <Ficha frente={imagen} index={i} setFicha={setFicha} setIndex={setIndexFicha} /> )))
+    return [...result];
+  }
+
+  const cambiarTurno = () => {
+    setTurno((turno + 1) % cantJugadores);
+  }
+
+  const sumarPuntoAJugadorActivo = () => {
+    let tmp = [...puntajes]
+    tmp[turno]++
+    setPuntajes(tmp)
+  }
+
+  const onSelection = ficha => {
+    const fichaVolteada = { ...ficha, volteada: true };
+    let fichasMezcladasCopia = [...fichasMezcladas];
+    fichasMezcladasCopia.splice(ficha.index, 1, fichaVolteada);
+    setFichasMezcladas(fichasMezcladasCopia);
+    if(fichaElegida === null) {
+      setFichaElegida(ficha);
+    } else if (fichaElegida.imagen === ficha.imagen) {
+      setFichaElegida(null);
+      sumarPuntoAJugadorActivo();
+      cambiarTurno();
+    } else {
+      setAnimandose(true);
+      setTimeout(() => {
+        fichasMezcladasCopia.splice(ficha.index, 1, ficha);
+        fichasMezcladasCopia.splice(fichaElegida.index, 1, fichaElegida);
+        setFichasMezcladas(fichasMezcladasCopia);
+        setFichaElegida(null);
+        setAnimandose(false);
+        cambiarTurno();
+      }, 1000);
+    }
   }
 
   return (
     <>
-      <button type="button" onClick={ () => root.style.setProperty('--grid-cols', 6) }> Cambiar a grid a 6</button>
-      <button type="button" onClick={ () => root.style.setProperty('--grid-cols', 4) }> Cambiar a grid a 4</button>
-      <button type="button" onClick={ () => console.log(ficha) }> primera ficha</button>
-      <button type="button" onClick={ () => console.log(fichaEnEspera) }> segunda ficha</button>
-      <button type="button" onClick={ () => prepararFichas(16) }> preparar 16 fichas </button>
-      <button type="button" onClick={ () => console.log(fichasMezcladas) }> fichas mezcladas</button>
-      <button type="button" onClick={ () => console.log(indexFicha) }> primer index</button>
-      <button type="button" onClick={ () => console.log(indexFichaEnEspera) }> segundo index</button>
-      <button type="button" onClick={ () => console.log(puntaje) }> ver puntos</button>
-      <button type="button" onClick={ () => setFichasMezcladas([]) }> limpiar tablero</button>
-
-      <div className="tablero"> {fichasMezcladas} </div>
-
+      {NavBar(iniciarJuego, reiniciarJuego, setTamañoTablero, setCantJugadores, partidaEnCurso, puntajes, turno)}
+      <Tablero fichas={fichasMezcladas} animandose={animandose} onSelection={onSelection} />
     </>
   );
 }
