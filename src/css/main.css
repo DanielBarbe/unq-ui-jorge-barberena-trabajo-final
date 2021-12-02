@@ -6,7 +6,8 @@
     display: grid;
     grid-template-columns: repeat(var(--grid-cols), 7em);
     grid-gap: 1em;
-    margin: 5em;
+    margin: 3em;
+    justify-content: center;
 }
 
 .ficha{
@@ -34,3 +35,123 @@
     transition: 0.3s;
     filter: grayscale(20%);
 }
+
+.nav {
+    background-color: rgb(71, 110, 106);
+    display: flex;
+    justify-content: center;
+}
+
+.nav-hidden {
+    visibility:hidden;
+}
+
+.nav-btn {
+    color: #fff;
+    font-size: 20px;
+    font-weight: 700;
+    background-color: #676e77;
+    border-color: #181a1b;
+    margin: 3px;
+    width: 180px;
+    height: 40px;
+    border-radius: 5%;
+}
+.nav-btn:hover {
+    background-color: #3d4147;
+    border-color: #080808;
+}
+
+.nav-btn:disabled {
+    color: rgb(65, 56, 56);
+    background-color: #65676b;
+    border-color: #575e69;
+}
+
+.nav-txt{
+    color: #fff;
+    font-size: 25px;
+    font-family: Arial;
+    margin: 3px;
+    display: flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.drop-menu{
+    font-size: 20px;
+    margin: 3px;
+    padding: 5px;
+    border: 2px solid;
+    border-color: black;
+    border-radius: 5%;
+}
+ 
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1040;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000;
+    opacity: .5;
+}
+  
+.modal-wrapper {
+    position: absolute;
+    top: 25%;
+    z-index: 1050;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    outline: 0;
+}
+  
+.modal {
+    z-index: 100;
+    background: rgb(250, 245, 230);
+    position: relative;
+    margin: 1.75rem auto;
+    border: 2px solid;
+    border-color:rgb(176, 183, 187);
+    border-radius: 3px;
+    max-width: 500px;
+    padding: 2rem;
+}
+  
+.modal-txt {
+    color: rgb(51, 56, 52);
+    font-size: 25px;
+    font-weight: 700;
+    font-family: Arial;
+    margin: 3px;
+    display: flex;
+    align-items:center;
+    justify-content:center;
+    padding: 20px;
+}
+
+.modal-btn {
+    color: #fff;
+    font-size: 20px;
+    font-weight: 700;
+    background-color: #676e77;
+    border-color: #181a1b;
+    margin: 3px;
+    width: 180px;
+    height: 40px;
+    border-radius: 5%;
+}
+
+.modal-btn:hover {
+    background-color: #3d4147;
+    border-color: #080808;
+}
+
+.center {
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+ }

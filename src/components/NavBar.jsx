@@ -1,6 +1,7 @@
+import '../css/main.css';
 import DropDownMenu from "./DropDownMenu.jsx";
 
-const NavBar = (iniciarJuego, reiniciarJuego, setTamañoTablero, setCantJugadores, partidaEnCurso, puntajes, turno) => {
+const NavBar = (iniciarJuego, finalizarJuego, setTamañoTablero, setCantJugadores, partidaEnCurso, puntajes, turno, cantJugadores) => {
 
     const cantidadDeJugadores = [{etiqueta: "1 Jugador", valor:1}
                                 ,{etiqueta: "2 Jugadores", valor:2}]
@@ -11,13 +12,18 @@ const NavBar = (iniciarJuego, reiniciarJuego, setTamañoTablero, setCantJugadore
 
     return (
         <>
-            <button type="button" onClick={ () => !partidaEnCurso && iniciarJuego() }>Iniciar Juego</button>
-            <button type="button" onClick={ () => reiniciarJuego() }>Reiniciar Juego</button>
-            {DropDownMenu("1 Jugador", cantidadDeJugadores, setCantJugadores)}
-            {DropDownMenu("4x4", tamañosTablero, setTamañoTablero)}
-            {`Puntajes J1: ${puntajes[0]} - J2 ${puntajes[1]} | Turno Jugador: ${turno}`} 
-
-
+            <div className="nav">
+                <span className="nav-txt">Partida para:</span>
+                {DropDownMenu("1 Jugador", cantidadDeJugadores, setCantJugadores, partidaEnCurso)}
+                <span className="nav-txt">Tamaño tablero:</span>
+                {DropDownMenu("4x4", tamañosTablero, setTamañoTablero, partidaEnCurso)}
+                <button className="nav-btn" type="button" onClick={ () => iniciarJuego() } disabled={partidaEnCurso}>Iniciar Juego</button>
+                <button className="nav-btn" type="button" onClick={ () => finalizarJuego()} disabled={!partidaEnCurso}>Finalizar Juego</button>
+            </div>
+            <div className={`nav  ${!partidaEnCurso && "nav-hidden"}`}>
+                <span className="nav-txt">{cantJugadores > 1 ? `Puntos Jugador1: ${puntajes[0]} - Jugador2 ${puntajes[1]} | Turno Jugador: ${turno+1}`
+                                                             : `Puntos: ${puntajes[0]}`}</span>
+            </div> 
         </>    
     )
 

@@ -11,7 +11,8 @@ import spiderman from "../img/spiderman.png"
 import superman from "../img/superman.png"
 import wonder from "../img/wonder.png"
 import NavBar from "./NavBar.jsx"
-import { useState } from "react"
+import Modal from "./Modal.jsx"
+import { useEffect, useState } from "react"
 
 const imagenes = [batman, captain, flash, green, ironman, punisher, robin, spiderman, superman, wonder]
 
@@ -26,20 +27,29 @@ const App = () => {
   const [puntajes, setPuntajes] = useState([0,0]);
   const [cantJugadores, setCantJugadores] = useState(1);
   const [turno, setTurno] = useState(0);
+  const [resultado, setResultado] = useState ("")
+  const [mostarModal, setMostrarModal] = useState (false)
 
   const iniciarJuego = () => {
     setPartidaEnCurso(true);
     definirColumnasTablero()
-    const imagenesMezcladas = prepararImagenes(tamañoTablero * tamañoTablero);
-    setFichasMezcladas(imagenesMezcladas.map( (imagen, i) => ({ index: i, imagen, volteada: false }) ));
     prepararFichas();
   }
 
   const reiniciarJuego = () => {
-    setPartidaEnCurso(true);
-    definirColumnasTablero()
+    reiniciarPuntosYTurno()
+    iniciarJuego()
+  }
+
+  const finalizarJuego = () => {
+    reiniciarPuntosYTurno();
+    setFichasMezcladas([]);
+    setPartidaEnCurso(false);
+  }
+
+  const reiniciarPuntosYTurno = () => {
+    setTurno(0);
     setPuntajes([0,0]);
-    prepararFichas();
   }
 
   const definirColumnasTablero = () => {
@@ -47,7 +57,7 @@ const App = () => {
   }
 
   const prepararFichas = () => {
-    const imagenesMezcladas = prepararImagenes(tamañoTablero * tamañoTablero);
+    let imagenesMezcladas = prepararImagenes(tamañoTablero * tamañoTablero);
     setFichasMezcladas(imagenesMezcladas.map( (imagen, i) => ({ index: i, imagen, volteada: false }) ));
   }
 
@@ -72,17 +82,17 @@ const App = () => {
   }
 
   const sumarPuntoAJugadorActivo = () => {
-    let tmp = [...puntajes]
-    tmp[turno]++
-    setPuntajes(tmp)
+    let tmp = [...puntajes];
+    tmp[turno]++;
+    setPuntajes(tmp);
   }
 
-  const onSelection = ficha => {
-    const fichaVolteada = { ...ficha, volteada: true };
+  const onSelection = (ficha) => {
+    let fichaVolteada = { ...ficha, volteada: true };
     let fichasMezcladasCopia = [...fichasMezcladas];
     fichasMezcladasCopia.splice(ficha.index, 1, fichaVolteada);
     setFichasMezcladas(fichasMezcladasCopia);
-    if(fichaElegida === null) {
+    if(!fichaElegida) {
       setFichaElegida(ficha);
     } else if (fichaElegida.imagen === ficha.imagen) {
       setFichaElegida(null);
@@ -101,10 +111,35 @@ const App = () => {
     }
   }
 
+  const mostrarResultado = () => {
+    let res
+    if(puntajes[0] > puntajes[1]){
+      res = cantJugadores === 1 ? "Fin de la partida" : "Ganador Jugador 1"
+    } else if (puntajes[0] < puntajes[1]) {
+      res = "Ganador Jugador 2"
+    } else {
+      res = "Empate"
+    }
+    setResultado(res)
+    setMostrarModal(true)
+  }
+
+  useEffect( () => {
+    let puntajeTotal = (tamañoTablero * tamañoTablero) / 2
+    if (puntajeTotal === puntajes[0] + puntajes[1]){
+      mostrarResultado()
+    }
+  },[puntajes])
+
   return (
     <>
-      {NavBar(iniciarJuego, reiniciarJuego, setTamañoTablero, setCantJugadores, partidaEnCurso, puntajes, turno)}
+      {NavBar(iniciarJuego, finalizarJuego, setTamañoTablero, setCantJugadores, partidaEnCurso, puntajes, turno, cantJugadores)}
       <Tablero fichas={fichasMezcladas} animandose={animandose} onSelection={onSelection} />
+      <Modal reiniciarJuego={reiniciarJuego}
+             finalizarJuego={finalizarJuego}
+             ocultar={() => setMostrarModal(!mostarModal)} 
+             mostrandose={mostarModal} 
+             mensaje={resultado}/>
     </>
   );
 }
