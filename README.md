@@ -2,7 +2,7 @@
 
 ---
 
-###Descripción
+### Descripción
 
 Implementación del juego memotest en react con las siguientes características:
 - Fichas de logos de superhéroes.
@@ -11,7 +11,7 @@ Implementación del juego memotest en react con las siguientes características:
 - Posibilidad de reiniciar una partida.
 
 
-###Requisitos
+### Requisitos
 * Tener instalado Node.js - https://nodejs.org/en/
 
 
