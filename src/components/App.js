@@ -130,7 +130,7 @@ const App = () => {
       mostrarResultado()
     }
   },[puntajes])
-
+  
   return (
     <>
       {NavBar(iniciarJuego, finalizarJuego, setTamañoTablero, setCantJugadores, partidaEnCurso, puntajes, turno, cantJugadores)}
