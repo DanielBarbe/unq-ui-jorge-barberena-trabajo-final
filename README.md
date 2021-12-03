@@ -1,7 +1,5 @@
 # Trabajo Final Integrador (TFI) » 2°C 2021 - Memotest
 
----
-
 ### Descripción
 
 Implementación del juego memotest en react con las siguientes características:
