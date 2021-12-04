@@ -11,8 +11,7 @@ Implementación del juego memotest en react con las siguientes características:
 
 
 ### Requisitos
-* Tener instalado Node.js - https://nodejs.org/en/
-
+* Tener instalado Node.js y Node Package Manager (https://nodejs.org/en/ - Se recomienda instalar la version LTS).
 
 ### Como descargar y preparar el proyecto
 * Clonar el repositorio a una carpeta local ([github - clonar un repositorio](https://docs.github.com/es/repositories/creating-and-managing-repositories/cloning-a-repository)).
