@@ -1,4 +1,3 @@
-import '../css/main.css';
 import reverso from "../img/reverso.png";
 
 const Ficha = ({animandose, onSelection, ficha}) => (

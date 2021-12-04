@@ -9,6 +9,7 @@ Implementación del juego memotest en react con las siguientes características:
 - Posibilidad de jugar solo o localmente contra otro jugador.
 - Tamaños de tablero: 4x4, 6x6 y 8x8.
 - Posibilidad de reiniciar una partida.
+- Interfaz Responsive.
 
 
 ###Requisitos

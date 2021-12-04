@@ -1,24 +1,26 @@
-import "../css/main.css"
-import Tablero from "./Tablero.jsx"
-import batman from "../img/batman.png"
-import captain from "../img/captain.png"
-import flash from "../img/flash.png"
-import green from "../img/green.png"
-import ironman from "../img/ironman.png"
-import punisher from "../img/punisher.png"
-import robin from "../img/robin.png"
-import spiderman from "../img/spiderman.png"
-import superman from "../img/superman.png"
-import wonder from "../img/wonder.png"
-import NavBar from "./NavBar.jsx"
-import Modal from "./Modal.jsx"
-import { useEffect, useState } from "react"
+import "../css/main.css";
+import Tablero from "./Tablero.jsx";
+import batman from "../img/batman.png";
+import captain from "../img/captain.png";
+import flash from "../img/flash.png";
+import green from "../img/green.png";
+import ironman from "../img/ironman.png";
+import punisher from "../img/punisher.png";
+import robin from "../img/robin.png";
+import spiderman from "../img/spiderman.png";
+import superman from "../img/superman.png";
+import wonder from "../img/wonder.png";
+import NavBar from "./NavBar.jsx";
+import Modal from "./Modal.jsx";
+import useWindowSize from "../utils/useWindowsSize.jsx";
+import { useEffect, useState } from "react";
 
 const imagenes = [batman, captain, flash, green, ironman, punisher, robin, spiderman, superman, wonder]
 
 const App = () => {
 
   const root = document.querySelector(':root');
+  const { width } = useWindowSize();
   const [animandose, setAnimandose] = useState(false);
   const [fichaElegida, setFichaElegida] = useState(null);
   const [fichasMezcladas, setFichasMezcladas] = useState([]);
@@ -32,7 +34,7 @@ const App = () => {
 
   const iniciarJuego = () => {
     setPartidaEnCurso(true);
-    definirColumnasTablero()
+    setMaxColumnas()
     prepararFichas();
   }
 
@@ -52,8 +54,16 @@ const App = () => {
     setPuntajes([0,0]);
   }
 
-  const definirColumnasTablero = () => {
-    root.style.setProperty('--grid-cols', tamañoTablero)
+  const setMaxColumnas = () => {
+    width > 780 && definirColumnasTablero(tamañoTablero)
+    width < 780 && definirColumnasTablero(Math.min(tamañoTablero, 7))
+    width < 680 && definirColumnasTablero(Math.min(tamañoTablero, 6))
+    width < 580 && definirColumnasTablero(Math.min(tamañoTablero, 5))
+    width < 480 && definirColumnasTablero(Math.min(tamañoTablero, 4))
+  }
+
+  const definirColumnasTablero = (tamaño) => {
+    root.style.setProperty('--grid-cols', tamaño)
   }
 
   const prepararFichas = () => {
@@ -112,15 +122,15 @@ const App = () => {
   }
 
   const mostrarResultado = () => {
-    let res
+    let mensaje
     if(puntajes[0] > puntajes[1]){
-      res = cantJugadores === 1 ? "Fin de la partida" : "Ganador Jugador 1"
+      mensaje = cantJugadores === 1 ? "Fin de la partida" : "Ganador Jugador 1"
     } else if (puntajes[0] < puntajes[1]) {
-      res = "Ganador Jugador 2"
+      mensaje = "Ganador Jugador 2"
     } else {
-      res = "Empate"
+      mensaje = "Empate"
     }
-    setResultado(res)
+    setResultado(mensaje)
     setMostrarModal(true)
   }
 
@@ -131,6 +141,10 @@ const App = () => {
     }
   },[puntajes])
   
+  useEffect( () => {
+    setMaxColumnas()
+  },[width])
+
   return (
     <>
       {NavBar(iniciarJuego, finalizarJuego, setTamañoTablero, setCantJugadores, partidaEnCurso, puntajes, turno, cantJugadores)}

@@ -19,7 +19,7 @@ const NavBar = (iniciarJuego, finalizarJuego, setTamañoTablero, setCantJugadore
                 <button className="nav-btn" type="button" onClick={ () => iniciarJuego() } disabled={partidaEnCurso}>Iniciar Juego</button>
                 <button className="nav-btn" type="button" onClick={ () => finalizarJuego()} disabled={!partidaEnCurso}>Finalizar Juego</button>
             </div>
-            <div className={`nav nav-puntaje ${!partidaEnCurso && "nav-hidden"}`}>
+            <div className={`nav nav-puntaje ${cantJugadores === 1 && "nav-fix-height"} ${!partidaEnCurso && "nav-hidden"}`}>
                 <span className="nav-txt nav-txt-puntaje">{cantJugadores > 1 ? `Puntajes: Jugador1: ${puntajes[0]} - Jugador2: ${puntajes[1]} | Turno actual: Jugador ${turno+1}`
                                                              : `Puntos: ${puntajes[0]}`}</span>
             </div> 

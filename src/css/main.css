@@ -19,8 +19,8 @@
 }
 
 .ficha-imagen{
-    height: 90px;
-    width: 90px;
+    height: 80px;
+    width: 80px;
     border: 2px solid;
     border-radius: 100%;
     border-color: rgb(65, 161, 206);
@@ -50,6 +50,9 @@
     }
 }
 
+.nav-fix-height{
+    height: 40px;
+}
 
 .nav-hidden {
     visibility:hidden;
@@ -70,6 +73,7 @@
     height: 30px;
     border-radius: 5%;
 }
+
 .nav-btn:hover {
     background-color: #3d4147;
     border-color: #080808;
